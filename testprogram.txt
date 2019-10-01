@@ -1,0 +1,179 @@
+## MANUALLY GENERATED TEST CASES ##
+#To the right of each instruction is the expected value of the destination register
+
+# All nonfunctional instructions (no effects)
+jal x5, 20 		#x5 still 00000000
+jalr x6, x2, 4		#x6 still 00000000
+beq x4, x5, 24		#x4 still 00000000
+bne x3, x5, 20		#x3 still 00000000
+blt x2, x6, 44		#x2 still 00000000
+bge x1, x5, 32		#x1 still 00000000
+bltu x3, x4, 40		#x3 still 00000000
+bgeu x6, x7, 8		#x6 still 00000000
+lw x2, 20(x4)		#x2 still 00000000
+lb x5, 8(x3)		#x5 still 00000000
+sw x8, 4(x4)		#x8 still 00000000
+sb x2, 12(x12)		#x2 still 00000000
+
+# All functional instructions (no hazards)
+# First four addis give base numbers in registers to easily work with to check for correctness
+addi x1, x1, 1		#x1 = 00000001
+addi x2, x2, 2		#x2 = 00000002
+addi x3, x3, 3		#x3 = 00000003
+addi x4, x4, 31		#x4 = 0000001f
+add x6, x1, x2		#x6 = 00000003
+sub x7, x2, x1		#x7 = 00000001
+sub x5, x1, x3		#x5 = fffffffe
+and x8, x3, x2		#x8 = 00000002
+andi x9, x2, 6		#x9 = 00000002
+or x10, x4, x3		#x10 = 0000001f
+ori x11, x3, 8		#x11 = 0000000b
+xor x12, x3, x1		#x12 = 00000002
+xori x13, x3, 7		#x13 = 00000004
+slt x14, x1, x2		#x14 = 00000001
+slti x15, x5, 5		#x15 = 00000001
+sltu x16, x1, x2	#x16 = 00000001
+sltiu x17, x5, 5	#x17 = 00000000
+sra x18, x5, x4		#x18 = ffffffff
+srai x19, x4, 1		#x19 = 0000000f
+srl x20, x4, x1		#x20 = 0000000f
+srli x21, x4, 2		#x21 = 00000007
+sll x22, x4, x1		#x22 = 0000003e
+slli x23, x4, 2		#x23 = 0000007c
+lui x24, 20		#x24 = 00014000
+auipc x25, 20		#x25 = 00014090
+
+# All nonfunctional instructions (again after functional, maintain same register values as above)
+jal x5, 20		#x5 = fffffffe	
+jalr x6, x2, 4		#x6 = 00000003
+beq x4, x5, 24		#x4 = 0000001f
+bne x3, x5, 20		#x3 = 00000003
+blt x2, x6, 44		#x2 = 00000002
+bge x1, x5, 32		#x1 = 00000001
+bltu x3, x4, 40		#x3 = 00000003
+bgeu x6, x7, 8		#x6 = 00000003
+lw x2, 20(x4)		#x2 = 00000002
+lb x5, 8(x3)		#x5 = fffffffe
+sw x8, 4(x4)		#x8 = 00000002
+sb x2, 12(x12)		#x2 = 00000002
+
+# Edge case tests for functional instructions
+# Max Positive Immediate values (piazza says [-1024:1023])
+addi x1, x1, 1023	#x1 = 00000400
+andi x9, x2, 1023	#x9 = 00000002
+ori x11, x3, 1023	#x11 = 000003ff
+xori x13, x3, 1023	#x13 = 000003fc
+slti x15, x5, 1023	#x15 = 00000001
+sltiu x17, x5, 1023	#x17 = 00000000
+srai x19, x4, 1023	#x19 = 00000000
+srli x21, x4, 1023	#x21 = 00000000
+slli x23, x4, 1023	#x23 = 80000000
+lui x24, 1023		#x24 = 003ff000
+auipc x25, 1023		#x25 = 003ff0ec
+
+# Max Negative Immediate values
+addi x1, x1, -1024	#x1 = 00000000
+andi x9, x2, -1024	#x9 = 00000002
+ori x11, x3, -1024	#x11 = fffffc03
+xori x13, x3, -1024	#x13 = fffffc03
+slti x15, x5, -1024	#x15 = 00000000
+srai x19, x4, -1024	#x19 = 0000001f
+srli x21, x4, -1024	#x21 = 0000001f
+slli x23, x4, -1024	#x23 = 8000001f
+lui x24, -1024		#x24 = ffc00000
+auipc x25, -1024	#x25 = ffc00118
+
+# Edge Cases for Nonfunctional Instructions (no change on execution)
+# Large positive Values
+jal x5, 2047		#x5 = fffffffe	
+jalr x6, x2, 2047	#x6 = 00000003
+beq x4, x5, 2047	#x4 = 0000001f
+bne x3, x5, 2047	#x3 = 00000003
+blt x2, x6, 2047	#x2 = 00000002
+bge x1, x5, 2047	#x1 = 00000000
+bltu x3, x4, 2047	#x3 = 00000003
+bgeu x6, x7, 2047	#x6 = 00000003
+lw x2, 2047(x4)		#x2 = 00000002
+lb x5, 2047(x3)		#x5 = fffffffe
+sw x8, 2047(x4)		#x8 = 00000002
+sb x2, 2047(x12)	#x2 = 00000002
+
+# Large Negative Values
+jal x5, -2048		#x5 = fffffffe	
+jalr x6, x2, -2048	#x6 = 00000003
+beq x4, x5, -2048	#x4 = 0000001f
+bne x3, x5, -2048	#x3 = 00000003
+blt x2, x6, -2048	#x2 = 00000002
+bge x1, x5, -2048	#x1 = 00000000
+bltu x3, x4, -2048	#x3 = 00000003
+bgeu x6, x7, -2048	#x6 = 00000003
+lw x2, -2048(x4)	#x2 = 00000002
+lb x5, -2048(x3)	#x5 = fffffffe
+sw x8, -2048(x4)	#x8 = 00000002
+sb x2, -2048(x12)	#x2 = 00000002
+
+# M/X Forwarding
+add x3, x1, x2		#x3 = 00000002
+sub x5, x3, x1		#x5 = 00000002
+
+# WB/X Forwarding (following from previous two instructions)
+or x6, x3, x4		#x6 = 0000001f
+
+# Register Bypass (following from previous three instructions)
+add x6, x3, x8 		#x6 = 00000004
+
+# All together (with nonfunctional instruction that would normally cause load-use)
+add x3, x1, x2		#x3 = 00000002
+sub x5, x3, x5		#x5 = 00000000
+lw x6, 4(x3)		#x6 = 00000004
+or x5, x3, x6		#x5 = 00000006
+sw x6, 12(x3)		#x6 = 00000004
+
+# Some functional, some nonfunctional between functional instructions
+# 2 functional, nonfunctional in between
+add x3, x1, x4		#x3 = 0000001f
+lw x6, 4(x3)		#x6 = 00000004
+bne x3, x5, 20		#x3 = 0000001f
+sw x6, 12(x3)		#x6 = 00000004
+sub x5, x3, x1		#x5 = 0000001f
+
+# Random order
+add x3, x1, x4		#x3 = 0000001f
+bne x3, x5, 20		#x3 = 0000001f
+sw x6, 12(x3)		#x6 = 00000004
+sub x5, x3, x1		#x5 = 0000001f
+bltu x3, x4, 40		#x3 = 0000001f
+
+# Alternating order
+bne x3, x5, 20		#x3 = 0000001f
+add x3, x1, x4		#x3 = 0000001f
+sw x6, 12(x3)		#x6 = 00000004
+sub x5, x3, x1		#x5 = 0000001f
+bltu x3, x4, 40		#x3 = 0000001f
+
+# Further Hazard Testing (Encompasses M/X, W/X, and register bypass)
+add x2, x2, x2		#x2 = 00000004
+add x2, x2, x2		#x2 = 00000008
+add x2, x2, x2		#x2 = 00000010
+add x2, x2, x2		#x2 = 00000020
+add x2, x2, x2		#x2 = 00000040
+add x2, x2, x2		#x2 = 00000080
+add x2, x2, x2		#x2 = 00000100
+add x2, x2, x2		#x2 = 00000200
+add x2, x2, x2		#x2 = 00000400
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
